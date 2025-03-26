@@ -34,9 +34,11 @@ public class UsersController {
 
     @GetMapping("/get")
     public ResponseEntity<?> getAllUsers(){
+
         try{
+            System.out.println("testion the loggers for logout");
             List<Users> users = usersService.findAll();
-            return  new ResponseEntity<>(users,HttpStatus.OK);
+            return  new ResponseEntity<>(users , HttpStatus.OK);
         }catch (Exception e){
          return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
