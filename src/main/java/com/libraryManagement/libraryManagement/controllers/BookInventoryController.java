@@ -1,6 +1,7 @@
 package com.libraryManagement.libraryManagement.controllers;
 
 import com.libraryManagement.libraryManagement.Entities.BookInventory;
+import com.libraryManagement.libraryManagement.model.UpdateBookQuantity;
 import com.libraryManagement.libraryManagement.services.BookInventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,7 +68,7 @@ public class BookInventoryController {
     }
 
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?>  deleteById(@PathVariable Long id){
         try{
         bookInventoryService.deleteById(id);
@@ -76,5 +77,16 @@ public class BookInventoryController {
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        }
+
+    @PostMapping("/quantity/update")
+    public ResponseEntity<?> updateBookQuantityController( @RequestBody UpdateBookQuantity updateBookQuantity){
+        try{
+            bookInventoryService.updateBookQuantityService(updateBookQuantity);
+            return  new ResponseEntity<>("Book quantity updated successfully",HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("Book quantity could not be updated for some reasons",HttpStatus.NOT_FOUND);
+        }
     }
+
 }

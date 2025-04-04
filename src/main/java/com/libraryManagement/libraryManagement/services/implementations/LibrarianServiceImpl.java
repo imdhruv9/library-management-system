@@ -1,6 +1,7 @@
 package com.libraryManagement.libraryManagement.services.implementations;
 
 import com.libraryManagement.libraryManagement.Entities.Librarian;
+import com.libraryManagement.libraryManagement.model.UpdatePassword;
 import com.libraryManagement.libraryManagement.repository.LibrarianRepository;
 import com.libraryManagement.libraryManagement.services.LibrarianService;
 import com.libraryManagement.libraryManagement.utill.PasswordService;
@@ -66,4 +67,23 @@ public class LibrarianServiceImpl  implements LibrarianService {
             throw new RuntimeException("NO Such Id in the Database");
         }
     }
+
+    @Override
+    public void updatePasswordByUsername(UpdatePassword updatePassword){
+        try {
+            Librarian librarian = librarianRepository.findByUsername(updatePassword.getUsername());
+            if (passwordService.passwordMatcher(updatePassword.getOldPassword(), librarian.getPassword())) {
+                String newEncodedPassword = passwordService.encodePassword(updatePassword.getNewPassword());
+                librarian.setPassword(newEncodedPassword);
+                librarianRepository.save(librarian);
+
+            } else {
+                //I have to  write else condition here
+            }
+        }catch (Exception e){
+            throw new RuntimeException("no such librarian found");
+        }
+
+    }
+
 }

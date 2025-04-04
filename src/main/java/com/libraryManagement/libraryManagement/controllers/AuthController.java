@@ -47,8 +47,8 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequest.getUsername());
 
-            AuthResponse authResponse = new AuthResponse(jwtUtil.generateToken(userDetails.getUsername()));
-            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
+            String token = jwtUtil.generateToken(userDetails.getUsername());
+            return new ResponseEntity<>(token, HttpStatus.OK);
 
         } catch (BadCredentialsException e) {
             // Handle invalid username or password

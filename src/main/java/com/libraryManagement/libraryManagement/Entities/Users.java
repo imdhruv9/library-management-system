@@ -2,6 +2,7 @@ package com.libraryManagement.libraryManagement.Entities;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.Date;
@@ -14,44 +15,57 @@ public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name="user_id")
     private Long id;
 
-    @Column(name="first_name")
+    @NotNull
+    @Column(name="first_name",nullable = false)
     private String firstName;
 
-    @Column(name="last_name")
+    @NotNull
+    @Column(name="last_name",nullable = false)
     private String lastName;
 
-    @Column(name="username")
+    @NotNull
+    @Column(name="username",nullable = false,unique = true )
     private String username;
 
-    @Column(name="password")
+    @NotNull
+    @Column(name="password",nullable = false)
     private String password;
 
-    @Column(name="phone")
+    @NotNull
+    @Column(name="phone",nullable = false,unique = true)
     private String phone;
 
-    @Column(name="email")
+    @NotNull
+    @Column(name="email",nullable = false,unique = true)
     private String email;
 
-    @Column(name="registration_date")
+    @NotNull
+    @Column(name="registration_date",nullable = false)
     private Date registrationDate;
 
-    @Column(name="date_of_birth")
+    @NotNull
+    @Column(name="date_of_birth",nullable = false)
     private Date dateOfBirth;
 
-    @Column(name="gender")
+    @NotNull
+    @Column(name="gender",nullable = false)
     private String gender;
 
-    @Column(name="created_by")
+    @NotNull
+    @Column(name="created_by",nullable = false)
     private String createdBy;
 
-    @Column(name="created_date")
+    @NotNull
+    @Column(name="created_date",nullable = false)
     private Date createdDate;
 
-    @Column(name="is_active")
+    @NotNull
+    @Column(name="is_active",nullable = false)
     private Boolean isActive;
+
 
 
 }

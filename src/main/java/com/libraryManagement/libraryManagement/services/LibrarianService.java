@@ -1,6 +1,7 @@
 package com.libraryManagement.libraryManagement.services;
 
 import com.libraryManagement.libraryManagement.Entities.Librarian;
+import com.libraryManagement.libraryManagement.model.UpdatePassword;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface LibrarianService  {
     Optional<Librarian> getById(Long id);
 
     void deleteById(Long id);
+
+    void updatePasswordByUsername(UpdatePassword updatePassword);
 }

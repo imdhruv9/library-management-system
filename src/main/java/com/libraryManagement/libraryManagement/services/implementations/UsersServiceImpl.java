@@ -1,9 +1,11 @@
 package com.libraryManagement.libraryManagement.services.implementations;
 
 import com.libraryManagement.libraryManagement.Entities.Users;
+import com.libraryManagement.libraryManagement.model.UpdatePassword;
 import com.libraryManagement.libraryManagement.repository.UsersRepository;
 import com.libraryManagement.libraryManagement.services.UsersService;
 import com.libraryManagement.libraryManagement.utill.PasswordService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.util.Optional;
 
 
 @Service
+@Slf4j
 public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
     private final PasswordService passwordService;
@@ -26,11 +29,13 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public Users save(Users users){
         try{
+            log.info("Attempting to save user: {}", users);
             String encodedPassword = passwordService.encodePassword(users.getPassword());
             users.setPassword(encodedPassword);
         return usersRepository.save(users);
 
         }catch (Exception e){
+            log.error("duplicate entry not allowed",e);
             throw new RuntimeException("Invalid Data Entry");
         }
     }
@@ -64,6 +69,7 @@ public class UsersServiceImpl implements UsersService {
         usersRepository.deleteById(id);
 
         }catch (Exception e){
+            log.error("no such user found in the database please check your id ", e);
             throw new RuntimeException("No Data Found in the Database");
         }
     }
@@ -88,5 +94,21 @@ public class UsersServiceImpl implements UsersService {
             throw new RuntimeException("no Such User Found");
         }
     }
+    @Override
+    public void updatePasswordByUsername(UpdatePassword updatePassword){
+        try {
+            Users users = usersRepository.findByUsername(updatePassword.getUsername());
 
+
+            if (passwordService.passwordMatcher(updatePassword.getOldPassword(),users.getPassword())) {
+                String newEncodedPassword = passwordService.encodePassword(updatePassword.getNewPassword());
+                users.setPassword(newEncodedPassword);
+                usersRepository.save(users);
+            }
+             // here i have to throw exception if password did not match
+
+        }catch (Exception e){
+            throw new RuntimeException("no such user found");
+        }
+    }
 }
