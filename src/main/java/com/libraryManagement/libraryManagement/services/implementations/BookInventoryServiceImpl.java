@@ -1,15 +1,17 @@
 package com.libraryManagement.libraryManagement.services.implementations;
 
 import com.libraryManagement.libraryManagement.Entities.BookInventory;
+import com.libraryManagement.libraryManagement.model.UpdateBookQuantity;
 import com.libraryManagement.libraryManagement.repository.BookInventoryRepository;
 import com.libraryManagement.libraryManagement.services.BookInventoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class BookInventoryServiceImpl implements BookInventoryService{
 
@@ -78,6 +80,19 @@ public class BookInventoryServiceImpl implements BookInventoryService{
         }catch (Exception e){
             throw new RuntimeException("Deletion not completed successfully");
         }
+    }
+    @Override
+    public void updateBookQuantityService(UpdateBookQuantity updateBookQuantity){
+        try {
+            Optional<BookInventory> optionalBooks = bookInventoryRepository.findById(updateBookQuantity.getBookId());
+            BookInventory book = optionalBooks.orElseThrow(() -> new RuntimeException("no book found with this id" + updateBookQuantity.getBookId()));
+            book.setTotalQuantity(book.getTotalQuantity() + updateBookQuantity.getQuantity());
+            book.setAvailableQuantity(book.getAvailableQuantity() + updateBookQuantity.getQuantity());
+            bookInventoryRepository.save(book);
+        }catch (Exception e){
+            log.error("book quantity could not be updated ",e);
+        }
+
     }
 
 

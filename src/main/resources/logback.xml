@@ -1,0 +1,31 @@
+<configuration>
+    <!-- Set the log directory -->
+    <property name="LOG_PATH" value="C:\Users\dhruv\Desktop\LOG FOR LIBRARY MANAGEMENT"/>
+
+    <appender name="myFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- Main log file -->
+        <file>${LOG_PATH}\application.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- Ensure logs roll over correctly -->
+            <fileNamePattern>${LOG_PATH}\application-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>10KB</maxFileSize>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="ERROR">
+        <appender-ref ref="consoleAppender"/>
+        <appender-ref ref="myFileAppender"/>
+    </root>
+</configuration>

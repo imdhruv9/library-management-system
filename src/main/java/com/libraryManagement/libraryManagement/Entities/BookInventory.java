@@ -2,6 +2,7 @@ package com.libraryManagement.libraryManagement.Entities;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import java.util.Date;
 
@@ -12,9 +13,9 @@ public class BookInventory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "book_id")
     private Long id;
-
+    
     @Column(name = "book_name")
     private String bookName;
 
@@ -44,5 +45,6 @@ public class BookInventory {
 
     @Column(name = "is_active")
     private Boolean isActive;
+
 
 }

@@ -1,6 +1,7 @@
 package com.libraryManagement.libraryManagement.services;
 
 import com.libraryManagement.libraryManagement.Entities.Users;
+import com.libraryManagement.libraryManagement.model.UpdatePassword;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,4 +15,7 @@ public interface UsersService {
     Optional<Users> getById(Long id);
 
     Users findByUsername(String username);
+    
+
+    void updatePasswordByUsername(UpdatePassword updatePassword);
 }

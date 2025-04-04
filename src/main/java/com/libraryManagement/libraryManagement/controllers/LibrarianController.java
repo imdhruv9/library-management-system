@@ -1,7 +1,9 @@
 package com.libraryManagement.libraryManagement.controllers;
 
 import com.libraryManagement.libraryManagement.Entities.Librarian;
+import com.libraryManagement.libraryManagement.model.UpdatePassword;
 import com.libraryManagement.libraryManagement.services.LibrarianService;
+import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,7 @@ public class LibrarianController {
     }
 
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<?> create(@RequestBody Librarian librarian){
         try{
           librarianService.save(librarian);
@@ -76,8 +78,19 @@ public class LibrarianController {
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
     }
+
+    @PatchMapping("/password/update")
+    public ResponseEntity<?> updatePasswordByUsername(@RequestBody UpdatePassword updatePassword){
+        try{
+            librarianService.updatePasswordByUsername(updatePassword);
+            return new ResponseEntity<>("password  Updated Successfully",HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("could not update password",HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 
 
 }

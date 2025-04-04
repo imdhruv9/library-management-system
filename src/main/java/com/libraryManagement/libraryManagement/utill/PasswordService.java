@@ -16,4 +16,11 @@ public class PasswordService {
     public String encodePassword(String rawPassword){
         return bCryptPasswordEncoder.encode(rawPassword);
     }
+
+    public boolean passwordMatcher(String oldPassword, String dbPassword){
+
+        Boolean val = bCryptPasswordEncoder.matches(oldPassword,dbPassword);
+        return val;
+    }
+
 }

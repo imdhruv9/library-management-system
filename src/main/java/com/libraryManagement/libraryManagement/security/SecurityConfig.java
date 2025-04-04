@@ -41,17 +41,21 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();  // Use bcrypt to encode/decode passwords
     }
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/register")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/users/register")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/librarian/register")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/book/issue")).permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(withDefaults()); // Add this line if needed for basic auth.
+
 
         return http.build();
     }

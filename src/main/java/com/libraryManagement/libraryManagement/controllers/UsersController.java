@@ -2,6 +2,7 @@ package com.libraryManagement.libraryManagement.controllers;
 
 
 import com.libraryManagement.libraryManagement.Entities.Users;
+import com.libraryManagement.libraryManagement.model.UpdatePassword;
 import com.libraryManagement.libraryManagement.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class UsersController {
        this.usersService = usersService;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/register")
     public ResponseEntity<?> create(@RequestBody Users users ){
         try{
         Users users1 =  usersService.save(users);
@@ -87,6 +88,15 @@ public class UsersController {
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
+        }
+    }
+    @PatchMapping("/update/password")
+    public ResponseEntity<?> updatePasswordByUsername(@RequestBody UpdatePassword updatePassword){
+        try{
+            usersService.updatePasswordByUsername(updatePassword);
+            return new ResponseEntity<>("password updated successfully",HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
