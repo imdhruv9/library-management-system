@@ -1,6 +1,8 @@
 package com.libraryManagement.libraryManagement.services;
 
 import com.libraryManagement.libraryManagement.Entities.BookInventory;
+import com.libraryManagement.libraryManagement.model.BookAvailabilityDto;
+import com.libraryManagement.libraryManagement.model.BookTransactionDTO;
 import com.libraryManagement.libraryManagement.model.UpdateBookQuantity;
 
 import java.awt.print.Book;
@@ -19,4 +21,8 @@ public interface BookInventoryService {
     void deleteById(Long id);
 
     void updateBookQuantityService(UpdateBookQuantity updateBookQuantity);
+
+    List<BookAvailabilityDto> searchBookAvailibilitybyBookNameService(String bookName);
+
+    List<BookAvailabilityDto> searchBookAvailibilitybyAutorService(String author);
 }

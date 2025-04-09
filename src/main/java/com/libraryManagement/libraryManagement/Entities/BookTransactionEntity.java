@@ -1,18 +1,20 @@
 package com.libraryManagement.libraryManagement.Entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
+
 @Data
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 // applying a constraints so that no user can take same book again
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"book_id", "user_id"}))
-public class BookIssueTransactionEntity {
+public class BookTransactionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "transaction_id")
@@ -31,22 +33,24 @@ public class BookIssueTransactionEntity {
     private Librarian librarianId;
 
 
-    private Integer quantity;
-
     private LocalDate issuedDate;
 
-    private LocalDate returnDate;
-   public BookIssueTransactionEntity
-           (BookInventory bookId,Users userId,Librarian librarianId,Integer quantity){
+    private LocalDate dueDate;
+    private LocalDate submitDate;
+   public BookTransactionEntity
+           (BookInventory bookId,Users userId,Librarian librarianId){
        this.bookId= bookId;
        this.userId = userId;
        this.librarianId = librarianId;
-       this.quantity = quantity;
        this.issuedDate = LocalDate.now();
-       this.returnDate = calculateReturnDate(bookId.getMaxRentalDays(), issuedDate);
+       this.dueDate = calculateReturnDate(bookId.getMaxRentalDays(), issuedDate);
+
 
    }
-   private LocalDate calculateReturnDate(Integer maxRentalDays,LocalDate issuedDate){
+
+
+
+    private LocalDate calculateReturnDate(Integer maxRentalDays,LocalDate issuedDate){
        return issuedDate.plusDays(maxRentalDays);
    }
 

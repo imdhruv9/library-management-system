@@ -1,6 +1,7 @@
 package com.libraryManagement.libraryManagement.controllers;
 
 import com.libraryManagement.libraryManagement.Entities.BookInventory;
+import com.libraryManagement.libraryManagement.model.BookAvailabilityDto;
 import com.libraryManagement.libraryManagement.model.UpdateBookQuantity;
 import com.libraryManagement.libraryManagement.services.BookInventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/bookinventory")
+@RequestMapping("/book")
 public class BookInventoryController {
 //injecting service layer
 
@@ -88,5 +89,25 @@ public class BookInventoryController {
             return new ResponseEntity<>("Book quantity could not be updated for some reasons",HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/search")
+    public  ResponseEntity<List<BookAvailabilityDto>> searchBookAvailabilityController
+            (@RequestParam(required = false) String bookName, @RequestParam(required = false) String author){
+        try{
+
+            List<BookAvailabilityDto> list;
+            if(bookName != null) {
+                list =
+                        bookInventoryService.searchBookAvailibilitybyBookNameService(bookName);
+            } else {
+                list =
+                        bookInventoryService.searchBookAvailibilitybyAutorService(author);
+            }
+//
+            return new ResponseEntity<>(list ,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>( HttpStatus.OK);
+        }
+    }
 
 }
+

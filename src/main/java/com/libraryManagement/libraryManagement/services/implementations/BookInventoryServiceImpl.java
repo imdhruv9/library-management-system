@@ -1,6 +1,7 @@
 package com.libraryManagement.libraryManagement.services.implementations;
 
 import com.libraryManagement.libraryManagement.Entities.BookInventory;
+import com.libraryManagement.libraryManagement.model.BookAvailabilityDto;
 import com.libraryManagement.libraryManagement.model.UpdateBookQuantity;
 import com.libraryManagement.libraryManagement.repository.BookInventoryRepository;
 import com.libraryManagement.libraryManagement.services.BookInventoryService;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,7 +87,8 @@ public class BookInventoryServiceImpl implements BookInventoryService{
     public void updateBookQuantityService(UpdateBookQuantity updateBookQuantity){
         try {
             Optional<BookInventory> optionalBooks = bookInventoryRepository.findById(updateBookQuantity.getBookId());
-            BookInventory book = optionalBooks.orElseThrow(() -> new RuntimeException("no book found with this id" + updateBookQuantity.getBookId()));
+            BookInventory book =
+                    optionalBooks.orElseThrow(() -> new RuntimeException("no book found with this id" + updateBookQuantity.getBookId()));
             book.setTotalQuantity(book.getTotalQuantity() + updateBookQuantity.getQuantity());
             book.setAvailableQuantity(book.getAvailableQuantity() + updateBookQuantity.getQuantity());
             bookInventoryRepository.save(book);
@@ -93,6 +96,37 @@ public class BookInventoryServiceImpl implements BookInventoryService{
             log.error("book quantity could not be updated ",e);
         }
 
+    }
+    @Override
+    public List<BookAvailabilityDto> searchBookAvailibilitybyBookNameService(String bookName){
+        List<BookInventory> list  =  bookInventoryRepository.findByBookNameContainingIgnoreCase(bookName);
+        List<BookAvailabilityDto> dtoList = new ArrayList<>();
+        for(BookInventory book :list){
+            BookAvailabilityDto bookAvailabilityDto =
+                    new BookAvailabilityDto
+                            (book.getId(),book.getBookName(),book.getAuthor(),
+                                    book.getCategory(),book.getPrice(),book.getAvailableQuantity());
+            dtoList.add(bookAvailabilityDto);
+        }
+
+
+       return dtoList;
+
+    }
+
+    @Override
+    public List<BookAvailabilityDto> searchBookAvailibilitybyAutorService(String author){
+        List<BookInventory> list = bookInventoryRepository.findByAuthorContainingIgnoreCase(author);
+        List<BookAvailabilityDto> dtoList = new ArrayList<>();
+        for(BookInventory book : list){
+            BookAvailabilityDto bookAvailabilityDto =
+                    new BookAvailabilityDto
+                            (book.getId(),book.getBookName(),book.getAuthor(),
+                                    book.getCategory(),book.getPrice(),book.getAvailableQuantity());
+            dtoList.add(bookAvailabilityDto);
+
+        }
+        return dtoList;
     }
 
 
