@@ -32,6 +32,7 @@ public class UsersServiceImpl implements UsersService {
             log.info("Attempting to save user: {}", users);
             String encodedPassword = passwordService.encodePassword(users.getPassword());
             users.setPassword(encodedPassword);
+            users.setRole("ROLE_USER");
         return usersRepository.save(users);
 
         }catch (Exception e){

@@ -1,7 +1,11 @@
 package com.libraryManagement.libraryManagement.security;
 
+import com.libraryManagement.libraryManagement.Entities.Librarian;
+import com.libraryManagement.libraryManagement.Entities.Users;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.nio.charset.StandardCharsets;
@@ -10,7 +14,7 @@ import java.util.Date;
 
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
-
+@Data
 @Component
 public class JwtUtil {
 
@@ -25,24 +29,31 @@ public class JwtUtil {
     }
 
     // Generate Token
-    public String generateToken(String username) {
-        System.out.println("HERE at jwtUtil.generateToken");
+
+    public String generateToken(String user,String role) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(user)
                 .setIssuedAt(new Date())
+                .claim("role", role)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // Extract Username from Token
-    public String extractUsername(String token) {
+    private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+                .getBody();
+    }
+    // Extract Username from Token
+
+    public String extractUsername(String token) {
+        return extractAllClaims(token).getSubject();
+    }
+    public String extractRole(String token) {
+        return extractAllClaims(token).get("role", String.class); // <-- New method to get role
     }
 
     // Validate Token
@@ -53,14 +64,9 @@ public class JwtUtil {
 
     // Check if Token is Expired
     private boolean isTokenExpired(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getExpiration()
-                .before(new Date());
+        return extractAllClaims(token).getExpiration().before(new Date());
     }
+
 
 
 }

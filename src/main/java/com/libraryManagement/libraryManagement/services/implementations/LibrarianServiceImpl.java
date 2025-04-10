@@ -29,6 +29,8 @@ public class LibrarianServiceImpl  implements LibrarianService {
         try{
             String encodedPassword = passwordService.encodePassword(librarian.getPassword());
             librarian.setPassword(encodedPassword);
+            librarian.setRole("ROLE_LIBRARIAN");
+
 
          librarianRepository.save(librarian);
 

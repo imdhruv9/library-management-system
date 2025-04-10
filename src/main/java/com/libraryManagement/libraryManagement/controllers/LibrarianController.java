@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("librarian")
+@RequestMapping("/librarian")
 public class LibrarianController {
 
     private final LibrarianService librarianService;

@@ -1,6 +1,5 @@
 package com.libraryManagement.libraryManagement.controllers;
 
-import com.libraryManagement.libraryManagement.model.AuthResponse;
 import com.libraryManagement.libraryManagement.model.LoginRequest;
 import com.libraryManagement.libraryManagement.security.JwtAuthenticationFilter;
 import com.libraryManagement.libraryManagement.security.JwtUtil;
@@ -13,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,12 +42,16 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> loginRequest(@RequestBody LoginRequest loginRequest) {
         try {
-//            System.out.println(" Login Request : "+loginRequest.getUsername()+", "+loginRequest.getPassword());
+
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequest.getUsername());
+            String role = userDetails.getAuthorities().stream()
+                    .findFirst()
+                    .map(GrantedAuthority::getAuthority)  // e.g., "ROLE_LIBRARIAN"
+                    .orElse("ROLE_USER");
 
-            String token = jwtUtil.generateToken(userDetails.getUsername());
+            String token = jwtUtil.generateToken(userDetails.getUsername(), role);
             return new ResponseEntity<>(token, HttpStatus.OK);
 
         } catch (BadCredentialsException e) {
@@ -62,7 +66,7 @@ public class AuthController {
     }
 
     @GetMapping("/logout/{s}")
-    public ResponseEntity<?> logoutrequest(@PathVariable String s, HttpServletRequest request) {
+    public ResponseEntity<?> logoutRequest(@PathVariable String s, HttpServletRequest request) {
         try {
             String token = jwtAuthenticationFilter.extractToken(request);
             System.out.println("your jwt token is " + token);
