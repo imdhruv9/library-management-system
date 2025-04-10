@@ -49,7 +49,10 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/users/register")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/librarian/register")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/book/issue")).permitAll()
+                        .requestMatchers("/users/**").hasRole("USER")
+                        .requestMatchers("/librarian/**").hasRole("LIBRARIAN")
+
+
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

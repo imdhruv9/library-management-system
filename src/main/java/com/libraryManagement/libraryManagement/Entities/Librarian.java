@@ -61,8 +61,13 @@ public class Librarian {
     private Date createdDate;
 
     @NotNull
+    @Column(name = "role", nullable = false)
+    private String role;
+
+    @NotNull
     @Column(name="is_active", nullable = false)
     private Boolean isActive;
+
 
 
 
